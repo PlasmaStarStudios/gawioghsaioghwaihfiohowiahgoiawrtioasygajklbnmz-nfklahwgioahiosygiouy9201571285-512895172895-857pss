@@ -108,14 +108,14 @@ const topbarTemplate = `
   </div>
   <nav>
     <ul>
-      <li><a href="https://plasmastarstudios.com">Home</a></li>
+      <li><a href="https://plasmastarstudios.github.io/gawioghsaioghwaihfiohowiahgoiawrtioasygajklbnmz-nfklahwgioahiosygiouy9201571285-512895172895-857pss/">Home</a></li>
       <li>
         <a href="#">Projects</a>
         <ul class="dropdown">
           <li class="has-submenu">
             <a href="#">Games ❯</a>
             <ul class="side-menu">
-              <li><a href="Projects/games/iifpp/index.html">IIFPP (BETA)</a></li>
+              <li><a href="https://plasmastarstudios.github.io/gawioghsaioghwaihfiohowiahgoiawrtioasygajklbnmz-nfklahwgioahiosygiouy9201571285-512895172895-857pss/Projects/games/iifpp/">IIFPP (BETA)</a></li>
               <li><a href="#">RRP (ALPHA)</a></li>
             </ul>
           </li>
