@@ -116,7 +116,7 @@ const topbarTemplate = `
             <a href="#">Games ❯</a>
             <ul class="side-menu">
               <li><a href="https://plasmastarstudios.github.io/gawioghsaioghwaihfiohowiahgoiawrtioasygajklbnmz-nfklahwgioahiosygiouy9201571285-512895172895-857pss/Projects/games/iifpp/">IIFPP (BETA)</a></li>
-              <li><a href="https://plasmastarstudios.github.io/gawioghsaioghwaihfiohowiahgoiawrtioasygajklbnmz-nfklahwgioahiosygiouy9201571285-512895172895-857pss/Projects/games/rrp/">RRP (ALPHA)</a></li>
+              <li><a href="https://plasmastarstudios.github.io/gawioghsaioghwaihfiohowiahgoiawrtioasygajklbnmz-nfklahwgioahiosygiouy9201571285-512895172895-857pss/Projects/games/rrp/">RRP</a></li>
             </ul>
           </li>
           <li class="has-submenu">
