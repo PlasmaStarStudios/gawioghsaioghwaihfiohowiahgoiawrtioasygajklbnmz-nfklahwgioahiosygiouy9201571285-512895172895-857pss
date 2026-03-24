@@ -15,19 +15,6 @@
             padding: 20px;
         }
 
-        /* Settings Link Styling */
-        .settings-link-container {
-            text-align: right;
-            margin-bottom: 10px;
-        }
-        .settings-link-container a {
-            color: #b366ff;
-            text-decoration: none;
-            font-size: 0.9em;
-            font-weight: bold;
-        }
-        .settings-link-container a:hover { text-decoration: underline; }
-
         .snippet-container {
             background-color: #262626;
             border-radius: 12px;
@@ -51,15 +38,25 @@
         .video-container { position: relative; margin-bottom: 20px; }
         .video-overlay {
             position: absolute;
-            top: 0; left: 0;
-            width: 560px; height: 315px;
+            top: 0;
+            left: 0;
+            width: 560px;
+            height: 315px;
             background-color: rgba(0, 0, 0, 1);
-            display: flex; justify-content: center; align-items: center;
-            z-index: 1; pointer-events: none; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1;
+            pointer-events: none; 
         }
         .video-overlay img { width: 100%; height: 100%; object-fit: cover; display: none; }
         .video-overlay .title {
-            position: absolute; color: white; font-size: 24px; font-weight: bold; text-align: center; z-index: 2;
+            position: absolute;
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            z-index: 2;
         }
         .toggle-button { padding: 10px 20px; border: none; color: white; cursor: pointer; border-radius: 5px; }
         .toggle-on { background-color: #4CAF50; }
@@ -69,7 +66,8 @@
         .email-system input, .email-system textarea {
             background: #1a1a1a; border: 1px solid #444; color: white; padding: 10px; border-radius: 5px; width: 100%; box-sizing: border-box;
         }
-        .email-system button { background: #722a9e; border: none; padding: 10px 20px; color: white; cursor: pointer; border-radius: 4px; }
+        .email-system button { background: #722a9e; border: none; transition: 0.3s; padding: 10px 20px; color: white; cursor: pointer; border-radius: 4px; }
+        .email-system button:hover { background: #8e3bc4; }
         
         iframe { border-radius: 8px; background: #000; }
     </style>
@@ -80,14 +78,6 @@
     <script src="../../topbar.js"></script>
 
     <div class="content-wrapper">
-
-        <div class="settings-link-container">
-            <a href="https://example.com">Settings ⚙️</a>
-        </div>
-
-        <div style="background-color: darkgray; padding: 20px; border: 1px solid #ccc; border-radius: 5px; margin-bottom: 40px;" id="profile">
-            <p style="color: black;">Loading profile...</p>
-        </div>
 
         <section class="snippet-container" id="section-job">
             <div class="snippet-header">💼 Job Essentials</div>
@@ -102,6 +92,7 @@
 
         <section class="snippet-container email-system" id="section-mail">
             <div class="snippet-header">✉️ Internal Mail</div>
+            
             <div class="mail-compose">
                 <h3>Send a Message</h3>
                 <form id="messageForm">
@@ -114,7 +105,9 @@
                     <button type="submit" style="margin-top:10px;">Send Message</button>
                 </form>
             </div>
+
             <hr style="border:0; border-top:1px solid #444; margin:30px 0;">
+
             <div class="mail-inbox">
                 <h3>Inbox</h3>
                 <ul id="subjectList" style="list-style:none; padding:0;"></ul>
@@ -123,8 +116,8 @@
                     <textarea id="messageText" readonly style="width:100%; height:150px;"></textarea>
                     <p id="senderLabel" style="font-style:italic; color:#aaa;"></p>
                     <button id="replyButton">Reply</button>
-                    <button id="deleteButton" style="background:#c0392b; color:white; border:none; padding:10px; cursor:pointer;">Delete</button>
-                    <button id="backButton" style="background:#555; color:white; border:none; padding:10px; cursor:pointer;">Back</button>
+                    <button id="deleteButton" style="background:#c0392b;">Delete</button>
+                    <button id="backButton" style="background:#555;">Back</button>
                 </div>
             </div>
         </section>
@@ -135,8 +128,12 @@
                 <input type="text" id="videoInput" placeholder="Enter YouTube Video URL" style="padding: 10px; width: 300px; background:#1a1a1a; color:white; border:1px solid #444;">
                 <button onclick="addVideo()" style="padding: 10px 20px; background:#722a9e; color:white; border:none; cursor:pointer;">Add Video</button>
             </div>
+
             <h2 id="playlistTitle" style="color: #b366ff;">Your Playlist (0/10)</h2>
-            <div id="videoList"></div>
+            
+            <div id="videoList">
+                </div>
+
             <div style="margin-top: 20px; display: flex; gap: 10px;">
                 <button onclick="loadVideos()" style="padding: 10px 20px; background:#444; color:white; border:none; cursor:pointer;">Load Videos</button>
                 <button id="loopToggleButton" class="toggle-button toggle-off" onclick="toggleLoop()">Loop Off</button>
@@ -148,54 +145,41 @@
 
     <script src="https://www.youtube.com/iframe_api"></script>
     <script>
-        const tableIdentifier = localStorage.getItem('CurrentLoggedInUSERID');
-        const apiUrl = 'https://670968a0af1a3998baa16e22.mockapi.io/pspninf/inf';
-
-        // --- 0. Account Info Logic ---
-        fetch(apiUrl)
-            .then(response => response.json())
-            .then(data => {
-                const profileData = data.find(profile => profile.UserID === tableIdentifier);
-                if (profileData) {
-                    const profileInfo = `
-                        <p style="color: black;"><strong>UserName:</strong> ${profileData.ProfileName}</p>
-                        <p style="color: black;"><strong>Gender:</strong> ${profileData.Gender}</p>
-                        <p style="color: black;"><strong>Age:</strong> ${profileData.Age}</p>
-                        <p style="color: black;"><strong>Job:</strong> ${profileData.Job}</p>
-                        <p style="color: black;"><strong>Contact Email:</strong> ${profileData.contactemail}</p>
-                    `;
-                    document.getElementById('profile').innerHTML = profileInfo;
-                    
-                    // Also trigger Job/Agenda init since we have user data
-                    initWorkAndAgenda(profileData);
-                    initMail(profileData.ProfileName);
-                } else {
-                    document.getElementById('profile').innerHTML = "<p style='color: black;'>No profile found.</p>";
+        const CURRENT_USER_ID = localStorage.getItem('CurrentLoggedInUSERID');
+        
+        // --- Shared Logic for Job/Agenda/Mail ---
+        async function initWorkAndAgenda() {
+            try {
+                const response = await fetch('https://670968a0af1a3998baa16e22.mockapi.io/pspninf/inf');
+                const data = await response.json();
+                const user = data.find(entry => entry.UserID === CURRENT_USER_ID);
+                if (user) {
+                    document.getElementById('embed-frame').src = user.agendaurl || '';
+                    const job = user.Job ? user.Job.toLowerCase() : "";
+                    const jobMap = {
+                        "management": "https://www.plasmastarstudios.com/-1/stafflogin/embedables/management",
+                        "musiccomposter": "https://www.plasmastarstudios.com/-5/work/stafflogin/embedables/musiccomposter"
+                    };
+                    if (jobMap[job]) {
+                        document.getElementById('job-embed-frame').src = jobMap[job];
+                        document.getElementById('job-embed-frame').style.display = 'block';
+                    } else {
+                        document.getElementById('job-message').textContent = `Position: ${user.Job || 'Staff'}. No specific Job Essentials required.`;
+                        document.getElementById('job-message').style.display = 'block';
+                    }
                 }
-            });
-
-        // --- 1 & 2. Job & Agenda Logic ---
-        function initWorkAndAgenda(user) {
-            document.getElementById('embed-frame').src = user.agendaurl || '';
-            const job = user.Job ? user.Job.toLowerCase() : "";
-            const jobMap = {
-                "management": "https://www.plasmastarstudios.com/-1/stafflogin/embedables/management",
-                "musiccomposter": "https://www.plasmastarstudios.com/-5/work/stafflogin/embedables/musiccomposter"
-            };
-            if (jobMap[job]) {
-                document.getElementById('job-embed-frame').src = jobMap[job];
-                document.getElementById('job-embed-frame').style.display = 'block';
-            } else {
-                document.getElementById('job-message').textContent = `Position: ${user.Job || 'Staff'}. No specifics required.`;
-                document.getElementById('job-message').style.display = 'block';
-            }
+            } catch (e) { console.error(e); }
         }
 
-        // --- 3. Internal Mail Logic ---
         let USER_MAIL_ADDR = '';
-        function initMail(profileName) {
-            USER_MAIL_ADDR = `${profileName}@plasmastarstudios.com`;
-            loadInbox();
+        async function initMail() {
+            if (!CURRENT_USER_ID) return;
+            const res = await fetch(`https://670968a0af1a3998baa16e22.mockapi.io/pspninf/inf?UserID=${CURRENT_USER_ID}`);
+            const data = await res.json();
+            if (data.length > 0) {
+                USER_MAIL_ADDR = `${data[0].ProfileName}@plasmastarstudios.com`;
+                loadInbox();
+            }
         }
 
         async function loadInbox() {
@@ -206,12 +190,12 @@
             list.innerHTML = '';
             messageData.forEach((item, index) => {
                 const li = document.createElement('li');
-                li.innerHTML = `<button onclick="showMessageDetails('${item.MESSAGE.replace(/\n/g, ' ')}', '${item.SENDER}', '${item.id}')" style="width:100%; text-align:left; padding:10px; margin-bottom:5px; background:#333; color:white; border:1px solid #444; cursor:pointer;">${item.SUBJECT}</button>`;
+                li.innerHTML = `<button onclick="showMessageDetails('${item.MESSAGE.replace(/\n/g, ' ')}', '${item.SENDER}', '${item.id}', '${item.SUBJECT}')" style="width:100%; text-align:left; padding:10px; margin-bottom:5px; background:#333; color:white; border:1px solid #444; cursor:pointer;">${item.SUBJECT}</button>`;
                 list.appendChild(li);
             });
         }
 
-        function showMessageDetails(msg, sender, id) {
+        function showMessageDetails(msg, sender, id, subject) {
             document.getElementById('messageText').value = msg;
             document.getElementById('senderLabel').textContent = `From: ${sender}`;
             document.getElementById('messageDetails').style.display = 'block';
@@ -223,7 +207,7 @@
                 document.getElementById('subjectList').style.display = 'block';
             };
         }
-        
+
         document.getElementById('backButton').onclick = () => {
             document.getElementById('messageDetails').style.display = 'none';
             document.getElementById('subjectList').style.display = 'block';
@@ -245,124 +229,164 @@
             loadInbox();
         };
 
-        // --- 4. EXACT LEGACY PLAYLIST CODE ---
+        // --- EXACT LEGACY PLAYLIST CODE START ---
         const baseURL = 'https://6670255a0900b5f87249953b.mockapi.io/API/Videos';
         let loopEnabled = false;
         let privacyEnabled = false;
         let players = [];
 
-        function onYouTubeIframeAPIReady() { console.log("YT API Ready"); }
+        function onYouTubeIframeAPIReady() { console.log("YouTube API Ready"); }
 
         async function addVideo() {
             const videoUrl = document.getElementById('videoInput').value.trim();
             if (!videoUrl) return;
-            const response = await fetch(baseURL);
-            const videos = await response.json();
-            const userVideos = videos.filter(v => v.accountName === tableIdentifier);
-            if (userVideos.length >= 10) return alert('Limit 10 videos.');
-            const videoId = extractVideoId(videoUrl);
-            if (videoId) {
-                await fetch(baseURL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ url: `https://www.youtube.com/embed/${videoId}`, accountName: tableIdentifier, customname: 'Unnamed' })
-                });
-                document.getElementById('videoInput').value = '';
-                loadVideos();
-            }
+            try {
+                const response = await fetch(baseURL);
+                const videos = await response.json();
+                const userVideos = videos.filter(video => video.accountName === CURRENT_USER_ID);
+                if (userVideos.length >= 10) { alert('Limit reached: 10 videos max.'); return; }
+                if (isValidYouTubeUrl(videoUrl)) {
+                    const videoId = extractVideoId(videoUrl);
+                    const embedUrl = `https://www.youtube.com/embed/${videoId}`;
+                    await fetch(baseURL, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ url: embedUrl, accountName: CURRENT_USER_ID, customname: 'Unnamed' })
+                    });
+                    document.getElementById('videoInput').value = '';
+                    alert('Video added. Click Load Videos to refresh.');
+                } else { alert('Invalid YouTube URL.'); }
+            } catch (error) { console.error('Error adding video:', error); }
         }
 
         async function loadVideos() {
-            const response = await fetch(baseURL);
-            const videos = await response.json();
-            const userVideos = videos.filter(v => v.accountName === tableIdentifier);
-            document.getElementById('playlistTitle').textContent = `Your Playlist (${userVideos.length}/10)`;
-            const videoList = document.getElementById('videoList');
-            videoList.innerHTML = '';
-            players.forEach(p => { if (p.player) p.player.destroy(); });
-            players = [];
-
-            userVideos.forEach(video => {
-                const videoId = extractVideoId(video.url);
-                const container = document.createElement('div');
-                container.className = 'video-container';
-                const wrapper = document.createElement('div');
-                wrapper.style.position = 'relative';
-
-                let overlay = null;
-                if (privacyEnabled) {
-                    overlay = document.createElement('div');
-                    overlay.className = 'video-overlay';
-                    overlay.innerHTML = `<img src="https://www.hondaofpasadena.com/assets/d405/img/img2/AudioVisualizer.gif" style="display:none; width:100%; height:100%; object-fit:cover;"><div class="title">${video.customname}</div>`;
-                    wrapper.appendChild(overlay);
-                }
-
-                const iframe = document.createElement('iframe');
-                iframe.width = "560"; iframe.height = "315";
-                iframe.src = `${video.url}?enablejsapi=1&autoplay=0&loop=${loopEnabled ? 1 : 0}&playlist=${videoId}`;
-                wrapper.appendChild(iframe);
-
-                const controls = document.createElement('div');
-                controls.style.marginTop = '10px';
-                controls.innerHTML = `
-                    <button onclick="togglePlayPause('${videoId}')" data-video-id="${videoId}" style="padding:5px 15px;">Play</button>
-                    <button onclick="renameVideo('${video.id}')" style="background:#007bff; color:white; border:none; padding:5px 10px; margin-left:5px; cursor:pointer;">Rename</button>
-                    <button onclick="deleteVideo('${video.id}')" style="background:red; color:white; border:none; padding:5px 10px; margin-left:5px; cursor:pointer;">Delete</button>
-                `;
-                container.appendChild(wrapper);
-                container.appendChild(controls);
-                videoList.appendChild(container);
-
-                const player = new YT.Player(iframe, {
-                    events: {
-                        'onReady': (e) => { const p = players.find(x => x.videoId === videoId); if(p) p.isReady = true; },
-                        'onStateChange': (e) => {
-                            const btn = document.querySelector(`button[data-video-id="${videoId}"]`);
-                            if(btn) btn.textContent = (e.data === YT.PlayerState.PLAYING) ? 'Pause' : 'Play';
-                            if(overlay) overlay.querySelector('img').style.display = (e.data === YT.PlayerState.PLAYING) ? 'block' : 'none';
-                        }
+            try {
+                const response = await fetch(baseURL);
+                const videos = await response.json();
+                const userVideos = videos.filter(video => video.accountName === CURRENT_USER_ID);
+                const playlistTitle = document.getElementById('playlistTitle');
+                playlistTitle.textContent = `Your Playlist (${userVideos.length}/10)`;
+                const videoList = document.getElementById('videoList');
+                videoList.innerHTML = '';
+                players.forEach(playerData => { if (playerData.player) playerData.player.destroy(); });
+                players = [];
+                userVideos.forEach(video => {
+                    const videoId = extractVideoId(video.url);
+                    const videoContainer = document.createElement('div');
+                    videoContainer.className = 'video-container';
+                    const videoWrapper = document.createElement('div');
+                    videoWrapper.style.position = 'relative';
+                    let overlay = null;
+                    if (privacyEnabled) {
+                        overlay = document.createElement('div');
+                        overlay.className = 'video-overlay';
+                        const gif = document.createElement('img');
+                        gif.src = "https://www.hondaofpasadena.com/assets/d405/img/img2/AudioVisualizer.gif";
+                        const title = document.createElement('div');
+                        title.className = 'title';
+                        title.textContent = video.customname || 'Unnamed Video';
+                        overlay.appendChild(gif);
+                        overlay.appendChild(title);
+                        videoWrapper.appendChild(overlay);
                     }
+                    const iframe = document.createElement('iframe');
+                    iframe.width = "560";
+                    iframe.height = "315";
+                    iframe.src = `${video.url}?enablejsapi=1&autoplay=0&loop=${loopEnabled ? 1 : 0}&playlist=${videoId}`;
+                    iframe.frameBorder = "0";
+                    iframe.allow = "autoplay; encrypted-media";
+                    iframe.allowFullscreen = true;
+                    videoWrapper.appendChild(iframe);
+                    const controls = document.createElement('div');
+                    controls.style.marginTop = '10px';
+                    controls.innerHTML = `
+                        <button onclick="togglePlayPause('${videoId}', this)" data-video-id="${videoId}" style="padding:5px 15px;">Play</button>
+                        <button onclick="renameVideo('${video.id}')" style="background:#007bff; color:white; border:none; padding:5px 10px; margin-left:5px;">Rename</button>
+                        <button onclick="deleteVideo('${video.id}')" style="background:red; color:white; border:none; padding:5px 10px; margin-left:5px;">Delete</button>
+                    `;
+                    videoContainer.appendChild(videoWrapper);
+                    videoContainer.appendChild(controls);
+                    videoList.appendChild(videoContainer);
+                    const player = new YT.Player(iframe, {
+                        events: {
+                            'onReady': (event) => { const pData = players.find(p => p.videoId === videoId); if (pData) pData.isReady = true; },
+                            'onStateChange': (event) => handlePlayerStateChange(event, videoId, overlay)
+                        }
+                    });
+                    players.push({ videoId: videoId, player: player, isReady: false, overlay: overlay });
                 });
-                players.push({ videoId, player, isReady: false });
-            });
+            } catch (error) { console.error('Error loading videos:', error); }
         }
 
-        function togglePlayPause(id) {
-            const p = players.find(x => x.videoId === id);
-            if (p && p.isReady) {
-                const s = p.player.getPlayerState();
-                s === YT.PlayerState.PLAYING ? p.player.pauseVideo() : p.player.playVideo();
+        function handlePlayerStateChange(event, videoId, overlay) {
+            const playButton = document.querySelector(`button[data-video-id="${videoId}"]`);
+            if (event.data === YT.PlayerState.PLAYING) {
+                if (playButton) playButton.textContent = 'Pause';
+                if (overlay) overlay.querySelector('img').style.display = 'block';
+            } else {
+                if (playButton) playButton.textContent = 'Play';
+                if (overlay) overlay.querySelector('img').style.display = 'none';
+            }
+        }
+
+        function togglePlayPause(videoId, button) {
+            const playerData = players.find(p => p.videoId === videoId);
+            if (playerData && playerData.isReady) {
+                const state = playerData.player.getPlayerState();
+                if (state === YT.PlayerState.PLAYING) { playerData.player.pauseVideo(); } 
+                else { playerData.player.playVideo(); }
             }
         }
 
         async function renameVideo(id) {
-            const n = prompt('New name:');
-            if(n) { await fetch(`${baseURL}/${id}`, { method: 'PUT', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({customname: n}) }); loadVideos(); }
+            const newName = prompt('Enter a new name for the video:');
+            if (newName) {
+                await fetch(`${baseURL}/${id}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ customname: newName })
+                });
+                loadVideos();
+            }
         }
 
         async function deleteVideo(id) {
-            if(confirm('Delete?')) { await fetch(`${baseURL}/${id}`, { method: 'DELETE' }); loadVideos(); }
+            if (confirm('Are you sure you want to delete this video?')) {
+                await fetch(`${baseURL}/${id}`, { method: 'DELETE' });
+                loadVideos();
+            }
         }
 
         function toggleLoop() {
             loopEnabled = !loopEnabled;
-            document.getElementById('loopToggleButton').className = loopEnabled ? 'toggle-button toggle-on' : 'toggle-button toggle-off';
-            document.getElementById('loopToggleButton').textContent = loopEnabled ? 'Loop On' : 'Loop Off';
+            const btn = document.getElementById('loopToggleButton');
+            btn.className = loopEnabled ? 'toggle-button toggle-on' : 'toggle-button toggle-off';
+            btn.textContent = loopEnabled ? 'Loop On' : 'Loop Off';
         }
 
         function togglePrivacy() {
             privacyEnabled = !privacyEnabled;
-            document.getElementById('privacyToggleButton').className = privacyEnabled ? 'toggle-button toggle-on' : 'toggle-button toggle-off';
-            document.getElementById('privacyToggleButton').textContent = privacyEnabled ? 'Privacy On' : 'Privacy Off';
+            const btn = document.getElementById('privacyToggleButton');
+            btn.className = privacyEnabled ? 'toggle-button toggle-on' : 'toggle-button toggle-off';
+            btn.textContent = privacyEnabled ? 'Privacy On' : 'Privacy Off';
+        }
+
+        function isValidYouTubeUrl(url) {
+            const regex = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/.+$/;
+            return regex.test(url);
         }
 
         function extractVideoId(url) {
-            const match = url.match(/(?:youtu\.be\/|youtube\.com(?:\/embed\/|\/v\/|\/watch\?v=|\/user\/\S+|\/ytscreeningroom\?v=|\/sanday\?v=))([\w\-]{11})/);
+            const regex = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/;
+            const match = url.match(regex);
             return match ? match[1] : null;
         }
 
-        // Initial playlist load
-        window.onload = loadVideos;
+        window.onload = () => {
+            initWorkAndAgenda();
+            initMail();
+            loadVideos();
+        };
     </script>
 </body>
 </html>
