@@ -115,89 +115,95 @@
 
     <script>
         /* --- PART 1: AUTO-CHECK LOGIC (Runs on Load) --- */
-        (async function() {
-            const userId = localStorage.getItem("CurrentLoggedInUSERID");
-            
-            if (!userId) {
-                // Set to 'nill' if it doesn't exist to prevent errors
-                localStorage.setItem("CurrentLoggedInUSERID", "nill");
-                console.log("No UserID found, set to nill.");
-            } else if (userId !== "nill") {
-                // Check for bans if a user is logged in
-                try {
-                    const response = await fetch("https://670968a0af1a3998baa16e22.mockapi.io/pspninf/inf");
-                    const data = await response.json();
-                    const userRecord = data.find(record => record.UserID === userId);
-
-                    if (userRecord && userRecord.Banned === true) {
-                        window.location.href = "https://plasmastarstudios.com/ban";
-                    }
-                } catch (e) {
-                    console.error("Ban check failed", e);
-                }
+(async function() {
+    const userId = localStorage.getItem("CurrentLoggedInUSERID");
+    if (!userId) {
+        localStorage.setItem("CurrentLoggedInUSERID", "nill");
+    } else if (userId !== "nill") {
+        try {
+            const response = await fetch("https://670968a0af1a3998baa16e22.mockapi.io/pspninf/inf");
+            const data = await response.json();
+            const userRecord = data.find(record => record.UserID === userId);
+            if (userRecord && userRecord.Banned === true) {
+                window.location.href = "https://plasmastarstudios.com/ban";
             }
-        })();
+        } catch (e) { console.error("Ban check failed", e); }
+    }
+})();
 
-        /* --- PART 2: LOGIN ANIMATION LOGIC --- */
-        let loginWindow = null;
+/* --- PART 2: LOGIN ANIMATION & WINDOW MONITORING --- */
+let loginWindow = null;
+let authCheckInterval = null;
 
-        function startAnimation() {
-            localStorage.setItem("localpssauthreturned", "false");
+function startAnimation() {
+    // Reset status
+    localStorage.setItem("localpssauthreturned", "false");
 
-            const btn = document.getElementById('loginButton');
-            const status = document.getElementById('statusTitle');
-            const container = document.getElementById('progressContainer');
-            const bar = document.getElementById('progressBar');
+    const btn = document.getElementById('loginButton');
+    const status = document.getElementById('statusTitle');
+    const container = document.getElementById('progressContainer');
+    const bar = document.getElementById('progressBar');
 
-            btn.classList.add('disabled');
-            btn.disabled = true;
+    btn.classList.add('disabled');
+    btn.disabled = true;
+    status.style.visibility = 'visible';
+    container.style.visibility = 'visible';
 
-            status.style.visibility = 'visible';
-            container.style.visibility = 'visible';
+    // Start initial 5% progress
+    setTimeout(() => {
+        bar.style.width = '5%';
+        openWindow();
+        startMonitoring();
+    }, 500);
+}
 
-            // Start Progress
+function openWindow() {
+    const w = 800, h = 600;
+    const left = (window.screen.width / 2) - (w / 2);
+    const top = (window.screen.height / 2) - (h / 2);
+
+    loginWindow = window.open(
+        "auth.html", // Make sure this points to your new auth page
+        "PSS Login",
+        `width=${w},height=${h},left=${left},top=${top}`
+    );
+}
+
+function startMonitoring() {
+    const bar = document.getElementById('progressBar');
+    
+    authCheckInterval = setInterval(() => {
+        const authStatus = localStorage.getItem("localpssauthreturned");
+
+        // SUCCESS: Auth window set status to true
+        if (authStatus === "true") {
+            clearInterval(authCheckInterval);
+            bar.style.width = '100%';
+            bar.style.backgroundColor = '#722a9e'; // Stay Purple
+            
             setTimeout(() => {
-                bar.style.width = '5%';
-                setTimeout(() => {
-                    openWindow();
-                    checkLocalStorage();
-                }, 1000);
-            }, 100);
+                window.location.href = "https://www.plasmastarstudios.com/pssaccount";
+            }, 1000);
+        } 
+        
+        // FAILURE: Window was closed without success
+        else if (loginWindow && loginWindow.closed) {
+            clearInterval(authCheckInterval);
+            
+            // Turn bar red and fill it to show the error
+            bar.style.transition = "width 0.5s, background-color 0.5s";
+            bar.style.width = '100%';
+            bar.style.backgroundColor = 'red';
+            
+            document.getElementById('statusTitle').innerText = "Authentication Failed / Window Closed";
+            document.getElementById('statusTitle').style.color = "red";
+
+            setTimeout(() => {
+                location.reload(); // Refresh as requested
+            }, 2000);
         }
-
-        function openWindow() {
-            const w = 800, h = 600;
-            const left = (window.screen.width / 2) - (w / 2);
-            const top = (window.screen.height / 2) - (h / 2);
-
-            loginWindow = window.open(
-                "https://plasmastarstudios.github.io/gawioghsaioghwaihfiohowiahgoiawrtioasygajklbnmz-nfklahwgioahiosygiouy9201571285-512895172895-857pss/Account/Stafflogin/login/auth/",
-                "PSS Login",
-                `width=${w},height=${h},left=${left},top=${top}`
-            );
-        }
-
-        function checkLocalStorage() {
-            const checkInterval = setInterval(() => {
-                const authStatus = localStorage.getItem("localpssauthreturned");
-                const bar = document.getElementById('progressBar');
-
-                if (authStatus === "true") {
-                    localStorage.setItem("localpssauthreturned", "false");
-                    bar.style.width = '98%';
-                    clearInterval(checkInterval);
-                    setTimeout(() => {
-                        window.location.href = "https://www.plasmastarstudios.com/pssaccount";
-                    }, 1000);
-                } else if (authStatus === "failed") {
-                    localStorage.setItem("localpssauthreturned", "false");
-                    bar.style.width = '100%';
-                    bar.style.backgroundColor = 'red';
-                    clearInterval(checkInterval);
-                    setTimeout(() => { location.reload(); }, 1500);
-                }
-            }, 500);
-        }
+    }, 500);
+}
     </script>
 </body>
 </html>
