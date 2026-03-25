@@ -1,11 +1,17 @@
+// --- STEP 1: SMART FAVICON INJECTOR ---
 (function() {
-    // Check if a favicon already exists to avoid duplicates
-    if (!document.querySelector("link[rel*='icon']")) {
+    // 1. Check if the page has a meta tag telling the topbar to IGNORE the icon
+    const isException = document.querySelector('meta[name="skip-topbar-icon"]');
+    
+    // 2. Also check if a favicon link already exists in the HTML head
+    const existingIcon = document.querySelector("link[rel*='icon']");
+
+    // Only inject the default logo if NO exception exists and NO icon is found
+    if (!isException && !existingIcon) {
         const link = document.createElement('link');
         link.rel = 'icon';
         link.type = 'image/png';
-        // USE THE FULL URL TO YOUR LOGO/ICON HERE
-        link.href = 'https://github.com/PlasmaStarStudios/pssweb/blob/main/icon.png?raw=true'; 
+        link.href = 'https://raw.githubusercontent.com/PlasmaStarStudios/pssweb/refs/heads/main/Devs.PN/logo.png'; 
         document.getElementsByTagName('head')[0].appendChild(link);
     }
 })();
