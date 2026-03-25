@@ -136,7 +136,7 @@ const topbarTemplate = `
       </li>
       <li><a href="#">Account</a></li> 
       <li><a href="#">🧺</a></li> 
-      <li><a herf="#">Version Beta 1.1.1</a></li>
+      <li><a herf="#">Version Beta 1.1.2</a></li>
     </ul>
   </nav>
 </header>
