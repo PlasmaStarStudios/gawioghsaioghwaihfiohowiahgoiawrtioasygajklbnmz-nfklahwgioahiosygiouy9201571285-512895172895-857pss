@@ -3,81 +3,147 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Customer Account | PlasmaStarStudios</title>
+    <title>Account | PlasmaStarStudios</title>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script type="text/javascript" src="https://cdn.emailjs.com/dist/email.min.js"></script>
     <style>
-        body { background-color: #1a1a1a; color: white; margin: 0; font-family: 'Segoe UI', sans-serif; }
-        .content-wrapper { max-width: 1000px; margin: 40px auto; padding: 20px; }
-        
-        /* Profile Info Box */
-        #profile { background-color: #262626; padding: 25px; border-radius: 12px; margin-bottom: 40px; border-left: 5px solid #b366ff; }
-        #profile p { margin: 5px 0; color: #ddd; }
-        #profile strong { color: #b366ff; }
-
-        .snippet-container { background-color: #262626; border-radius: 12px; padding: 30px; margin-bottom: 40px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); border-left: 5px solid #722a9e; }
-        .snippet-header { border-bottom: 1px solid #444; margin-bottom: 20px; padding-bottom: 10px; color: #b366ff; text-transform: uppercase; letter-spacing: 1px; font-size: 0.9em; }
-
-        /* Subscription Card Styling */
-        .card-container { display: flex; flex-wrap: wrap; gap: 25px; justify-content: center; }
-        .card {
-            background: #333; border-radius: 12px; overflow: hidden; width: 320px;
-            transition: transform 0.3s; border: 1px solid #444; position: relative;
+        :root {
+            --accent: #b366ff;
+            --bg-dark: #121212;
+            --card-bg: #1e1e1e;
+            --panel-bg: #252525;
+            --text-main: #e0e0e0;
+            --text-dim: #a0a0a0;
         }
-        .card:hover { transform: translateY(-5px); border-color: #722a9e; }
-        .card img { width: 100%; display: block; }
-        
-        .card-content { padding: 20px; text-align: center; }
-        .card h3 { margin: 0 0 10px 0; color: #b366ff; }
 
-        /* Controls Area (Hidden by default) */
-        .sub-controls {
-            background: #222; padding: 15px; border-top: 1px solid #444;
-            display: flex; flex-direction: column; gap: 8px;
+        body { 
+            background-color: var(--bg-dark); 
+            color: var(--text-main); 
+            margin: 0; 
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
         }
-        
-        /* Modernized Buttons */
-        .btn-sub {
-            padding: 10px; border: none; border-radius: 6px; cursor: pointer;
-            font-weight: bold; font-size: 0.85em; transition: 0.2s;
-            background: #444; color: white;
-        }
-        .btn-sub:hover:not(:disabled) { background: #555; }
-        .btn-sub.active { background: #722a9e; color: white; }
-        .btn-sub.danger { color: #ff4d4d; }
-        .btn-sub.danger:hover:not(:disabled) { background: #4d1a1a; }
-        
-        .status-msg { font-size: 0.75em; margin-top: 10px; color: #aaa; min-height: 15px; }
 
+        .content-wrapper { max-width: 1100px; margin: 40px auto; padding: 20px; }
+
+        /* Navigation / Top Bar logic */
+        .utility-nav { text-align: right; margin-bottom: 20px; }
+        .utility-nav a { color: var(--accent); text-decoration: none; margin-left: 20px; font-size: 0.9em; opacity: 0.8; transition: 0.3s; }
+        .utility-nav a:hover { opacity: 1; text-decoration: underline; }
+
+        /* Profile Section - Softened */
+        .profile-panel { 
+            background: var(--panel-bg); 
+            padding: 30px; 
+            border-radius: 15px; 
+            margin-bottom: 30px; 
+            border-left: 4px solid var(--accent);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        .profile-panel h2 { margin-top: 0; color: var(--accent); font-weight: 500; }
+        .profile-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
+        .profile-item strong { color: var(--accent); display: block; font-size: 0.8em; text-transform: uppercase; margin-bottom: 4px; }
+
+        /* Standard Containers */
+        .section-box { 
+            background: var(--panel-bg); 
+            border-radius: 15px; 
+            padding: 25px; 
+            margin-bottom: 30px; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        .section-title { 
+            font-size: 1.1em; 
+            color: var(--accent); 
+            margin-bottom: 20px; 
+            border-bottom: 1px solid #333; 
+            padding-bottom: 10px; 
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Subscriptions Cards - Friendly Grid */
+        .card-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+        .sub-card {
+            background: var(--card-bg); 
+            border-radius: 12px; 
+            overflow: hidden; 
+            border: 1px solid #333;
+            transition: 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+        .sub-card:hover { transform: translateY(-5px); border-color: var(--accent); box-shadow: 0 8px 20px rgba(0,0,0,0.4); }
+        .sub-card img { width: 100%; height: 160px; object-fit: cover; border-bottom: 1px solid #333; }
+        
+        .sub-content { padding: 15px; text-align: center; }
+        .sub-content h3 { margin: 0 0 15px 0; font-size: 1.1em; }
+
+        .btn-group { display: flex; flex-direction: column; gap: 8px; }
+        .btn-action {
+            background: #333; border: 1px solid #444; color: white;
+            padding: 8px; border-radius: 6px; cursor: pointer; font-size: 0.85em;
+            transition: 0.2s;
+        }
+        .btn-action:hover { background: #444; border-color: var(--accent); }
+        .btn-action.active { background: var(--accent); border-color: var(--accent); color: white; }
+        .btn-action.unsubscribe { color: #ff5555; margin-top: 5px; border: none; background: transparent; }
+        .btn-action.unsubscribe:hover { text-decoration: underline; background: rgba(255,85,85,0.1); }
+
+        /* Music Placeholder */
+        .music-input { width: 100%; padding: 12px; background: #111; border: 1px solid #333; color: white; border-radius: 8px; margin-bottom: 10px; box-sizing: border-box; }
+        
         /* Session Overlay */
-        #freezeLayer { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: black; display: none; z-index: 9999; color: white; text-align: center; flex-direction: column; justify-content: center; align-items: center; }
+        #freezeLayer { position: fixed; inset: 0; background: rgba(0,0,0,0.9); display: none; z-index: 10000; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
         body.sessionExpired #freezeLayer { display: flex; }
     </style>
 </head>
 <body>
 
     <div id="freezeLayer">
-        Session expired, please login
-        <button id="redirectButton" style="margin-top:20px; padding:10px 20px; background:#ff4444; color:white; border:none; border-radius:5px; cursor:pointer;">Go to Login</button>
+        <h1 style="color: var(--accent);">Session Expired</h1>
+        <p>Please log back in to access your dashboard.</p>
+        <button onclick="window.location.href='https://www.plasmastarstudios.com/-5/personal'" style="padding: 12px 30px; background: var(--accent); border: none; border-radius: 8px; color: white; cursor: pointer; font-weight: bold;">Login</button>
     </div>
 
     <div class="content-wrapper">
-        <div id="profile">
-            <p>Loading profile...</p>
+        <div class="utility-nav">
+            <a href="#">Settings ⚙️</a>
+            <a href="#" id="logoutBtn">Logout</a>
         </div>
 
-        <section class="snippet-container">
-            <div class="snippet-header">📺 Manage Subscriptions</div>
-            <div class="card-container" id="cardContainer">
-                <p>Checking subscriptions...</p>
+        <div class="profile-panel" id="profileArea">
+            <h2>Welcome Back</h2>
+            <div class="profile-grid" id="profileGrid">
+                <p>Loading user data...</p>
             </div>
-        </section>
+        </div>
+
+        <div class="section-box">
+            <div class="section-title">🛍️ Order History</div>
+            <p style="color: var(--text-dim); font-size: 0.9em;">Our payment gateway is currently undergoing maintenance. Check back soon!</p>
+        </div>
+
+        <div class="section-box">
+            <div class="section-title">📺 Your Subscriptions</div>
+            <div class="card-container" id="cardContainer">
+                <p style="color: var(--text-dim);">Syncing with database...</p>
+            </div>
+        </div>
+
+        <div class="section-box">
+            <div class="section-title">🎵 Music Playlist</div>
+            <input type="text" class="music-input" placeholder="Enter YouTube URL...">
+            <div style="display: flex; gap: 10px;">
+                <button class="btn-action active">Add to Playlist</button>
+                <button class="btn-action">Load Saved</button>
+            </div>
+            <p style="margin-top: 15px; color: var(--text-dim); font-size: 0.8em;">0/10 Videos Loaded</p>
+        </div>
     </div>
 
     <script>
-        // --- Initialization ---
-        emailjs.init("YOUR_USER_ID"); // Replace with your actual EmailJS User ID
+        // --- Setup ---
+        emailjs.init("YOUR_USER_ID");
         const MOCKAPI_USERDATA = "https://670968a0af1a3998baa16e22.mockapi.io/pspninf/personalaccounts";
         const MOCKAPI_SUBS = "https://67b8bf64699a8a7baef5211c.mockapi.io/EMAILSUBSCRIPTIONS/1";
 
@@ -93,122 +159,101 @@
         const auth = firebase.auth();
         const storedUserId = localStorage.getItem("CurrentLoggedInUSERID");
 
-        const subscriptionsList = {
-            "IIFPP": { name: "IIFPP", image: "https://github.com/PlasmaStarStudios/gawioghsaioghwaihfiohowiahgoiawrtioasygajklbnmz-nfklahwgioahiosygiouy9201571285-512895172895-857pss/blob/main/Account/Consumer/iifppbanner.png?raw=true" },
-            "RRP": { name: "RRP", image: "https://github.com/PlasmaStarStudios/gawioghsaioghwaihfiohowiahgoiawrtioasygajklbnmz-nfklahwgioahiosygiouy9201571285-512895172895-857pss/blob/main/Account/Consumer/rripbanner.png?raw=true" }
+        const subTemplates = {
+            "IIFPP": { name: "II Fusion Power Plant", image: "https://github.com/PlasmaStarStudios/gawioghsaioghwaihfiohowiahgoiawrtioasygajklbnmz-nfklahwgioahiosygiouy9201571285-512895172895-857pss/blob/main/Account/Consumer/iifppbanner.png?raw=true" },
+            "RRP": { name: "Rijen Roleplay", image: "https://github.com/PlasmaStarStudios/gawioghsaioghwaihfiohowiahgoiawrtioasygajklbnmz-nfklahwgioahiosygiouy9201571285-512895172895-857pss/blob/main/Account/Consumer/rripbanner.png?raw=true" }
         };
 
-        // --- Core Functions ---
+        // --- Logic ---
         auth.onAuthStateChanged(user => {
-            if (user && user.uid === storedUserId) { fetchUserData(); } 
+            if (user && user.uid === storedUserId) { loadDashboard(); } 
             else { document.body.classList.add('sessionExpired'); }
         });
 
-        async function fetchUserData() {
+        async function loadDashboard() {
             try {
-                const response = await fetch(MOCKAPI_USERDATA);
-                const data = await response.json();
-                const user = data.find(u => u.UserID === storedUserId);
+                const res = await fetch(MOCKAPI_USERDATA);
+                const users = await res.json();
+                const user = users.find(u => u.UserID === storedUserId);
                 if (user) {
                     renderProfile(user);
-                    renderCards(user.Subscriptions, user.contactemail);
+                    renderSubscriptions(user);
                 }
-            } catch (e) { console.error(e); }
+            } catch (e) { console.error("Sync Error:", e); }
         }
 
         function renderProfile(user) {
-            document.getElementById('profile').innerHTML = `
-                <p><strong>Username:</strong> ${user.ProfileName}</p>
-                <p><strong>Email:</strong> ${user.contactemail}</p>
+            document.getElementById('profileGrid').innerHTML = `
+                <div class="profile-item"><strong>Username</strong>${user.ProfileName}</div>
+                <div class="profile-item"><strong>Account ID</strong>#${user.id}</div>
+                <div class="profile-item"><strong>Email</strong>${user.contactemail}</div>
+                <div class="profile-item"><strong>Age / Gender</strong>${user.Age} / ${user.Gender}</div>
             `;
         }
 
-        function renderCards(subString, userEmail) {
+        function renderSubscriptions(user) {
             const container = document.getElementById("cardContainer");
             container.innerHTML = "";
-            let keys = subString ? subString.split(/,\s*/) : [];
+            let activeKeys = user.Subscriptions ? user.Subscriptions.split(/,\s*/) : [];
 
-            keys.forEach(key => {
-                if (subscriptionsList[key]) {
-                    const info = subscriptionsList[key];
+            activeKeys.forEach(key => {
+                if (subTemplates[key]) {
+                    const data = subTemplates[key];
                     const card = document.createElement("div");
-                    card.className = "card";
+                    card.className = "sub-card";
                     card.innerHTML = `
-                        <img src="${info.image}" alt="${info.name}">
-                        <div class="card-content">
-                            <h3>${info.name} Notifications</h3>
-                            <div class="sub-controls">
-                                <button class="btn-sub" onclick="handleSub('${key}', 'EVERYTHING', '${userEmail}', this)">Notify: Everything</button>
-                                <button class="btn-sub" onclick="handleSub('${key}', 'RELEASES', '${userEmail}', this)">Notify: Only Releases</button>
-                                <button class="btn-sub danger" onclick="handleSub('${key}', 'NONE', '${userEmail}', this)">Unsubscribe</button>
-                                <div class="status-msg" id="status-${key}">Select a preference</div>
+                        <img src="${data.image}" alt="banner">
+                        <div class="sub-content">
+                            <h3>${data.name}</h3>
+                            <div class="btn-group">
+                                <button class="btn-action" id="btn-${key}-EVERY" onclick="updatePref('${key}', 'EVERYTHING', '${user.contactemail}')">All Notifications</button>
+                                <button class="btn-action" id="btn-${key}-REL" onclick="updatePref('${key}', 'RELEASES', '${user.contactemail}')">Releases Only</button>
+                                <button class="btn-action unsubscribe" onclick="updatePref('${key}', 'NONE', '${user.contactemail}')">Turn off notifications</button>
                             </div>
+                            <p id="msg-${key}" style="font-size:0.7em; margin-top:10px; color:var(--text-dim);">Status: Active</p>
                         </div>
                     `;
                     container.appendChild(card);
                 }
             });
+            if(activeKeys.length === 0) container.innerHTML = "<p>You don't have any active subscriptions yet.</p>";
         }
 
-        // --- Subscription Logic ---
-        async function handleSub(subKey, type, email, btn) {
-            const statusBox = document.getElementById(`status-${subKey}`);
-            statusBox.innerText = "Updating...";
+        async function updatePref(key, type, email) {
+            const msg = document.getElementById(`msg-${key}`);
+            msg.innerText = "Saving changes...";
             
-            // Disable buttons in this card
-            const buttons = btn.parentElement.querySelectorAll('button');
-            buttons.forEach(b => b.disabled = true);
-
             try {
                 const res = await fetch(MOCKAPI_SUBS);
-                let data = await res.json();
+                let db = await res.json();
 
-                // Logic to update string lists
-                let everythingField = `${subKey}_EVERYTHING`;
-                let releasesField = `${subKey}_RELEASES`;
+                let eField = `${key}_EVERYTHING`;
+                let rField = `${key}_RELEASES`;
 
-                let listEvery = data[everythingField] ? data[everythingField].split(", ").filter(e => e !== email) : [];
-                let listRel = data[releasesField] ? data[releasesField].split(", ").filter(e => e !== email) : [];
+                let listE = db[eField] ? db[eField].split(", ").filter(i => i !== email) : [];
+                let listR = db[rField] ? db[rField].split(", ").filter(i => i !== email) : [];
 
-                if (type === "EVERYTHING") listEvery.push(email);
-                if (type === "RELEASES") listRel.push(email);
+                if (type === "EVERYTHING") listE.push(email);
+                if (type === "RELEASES") listR.push(email);
 
-                const updatedData = {
-                    ...data,
-                    [everythingField]: listEvery.join(", "),
-                    [releasesField]: listRel.join(", ")
-                };
-
-                const putRes = await fetch(MOCKAPI_SUBS, {
+                await fetch(MOCKAPI_SUBS, {
                     method: "PUT",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(updatedData)
+                    body: JSON.stringify({ ...db, [eField]: listE.join(", "), [rField]: listR.join(", ") })
                 });
 
-                if (putRes.ok) {
-                    statusBox.innerText = type === "NONE" ? "Unsubscribed" : "Preferences saved!";
-                    if (type !== "NONE") sendEmail(email, subKey, type);
-                } else {
-                    statusBox.innerText = "Error saving.";
-                }
+                msg.innerText = type === "NONE" ? "Notifications disabled" : "Preference saved!";
+                if (type !== "NONE") emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', { to_email: email, message: `Updated ${key} prefs to ${type}` });
 
-            } catch (err) {
-                statusBox.innerText = "Error connecting to server.";
-            } finally {
-                buttons.forEach(b => b.disabled = false);
-            }
+            } catch (err) { msg.innerText = "Error saving."; }
         }
 
-        async function sendEmail(userEmail, subName, type) {
-            const params = {
-                to_email: userEmail,
-                from_name: "Plasma Star Studios",
-                message: `You are now subscribed to ${type} notifications for ${subName}.`
-            };
-            emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', params);
-        }
-
-        document.getElementById("redirectButton").onclick = () => window.location.href = "https://www.plasmastarstudios.com/-5/personal";
+        document.getElementById("logoutBtn").onclick = () => {
+            auth.signOut().then(() => {
+                localStorage.removeItem("CurrentLoggedInUSERID");
+                window.location.href = "https://www.plasmastarstudios.com/-5/personal";
+            });
+        };
     </script>
 </body>
 </html>
