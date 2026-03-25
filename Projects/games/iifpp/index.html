@@ -74,6 +74,93 @@
     <div class="content-wrapper">
         <div class="main-box">
             <p style="text-align: center; font-size: 1.2em;">Welcome to the project page.</p>
+            <div class="button-wrapper">
+    <div class="container">
+        <button id="subscribeButton">Loading...</button>
+        <div id="message"></div>
+    </div>
+</div>
+
+<script>
+    const currentUserID = localStorage.getItem("CurrentLoggedInUSERID");
+    const apiUrl = "https://670968a0af1a3998baa16e22.mockapi.io/pspninf/personalaccounts";
+    const button = document.getElementById("subscribeButton");
+    const messageDiv = document.getElementById("message");
+
+    if (!currentUserID) {
+        button.textContent = "Subscribe (LOGIN REQUIRED)";
+        // Modify messageDiv.innerHTML to include the link
+        messageDiv.innerHTML = 'Subscriptions require an account. <a href="https://www.plasmastarstudios.com/-5/personal" style="color: blue; text-decoration: underline;">Login</a>.';
+        messageDiv.style.color = "red"; // Keep the error color for the message
+    } else {
+        fetch(apiUrl)
+            .then(response => response.json())
+            .then(data => {
+                const user = data.find(item => item.UserID === currentUserID);
+
+                if (!user) {
+                    button.textContent = "Subscribe (LOGIN REQUIRED)";
+                    // Modify messageDiv.innerHTML to include the link if user not found after fetch
+                    messageDiv.innerHTML = 'an account is required to subscribe <a href="https://www.plasmastarstudios.com/-5/personal" style="color: purple; text-decoration: underline;">Login</a>.';
+                    messageDiv.style.color = "red"; // Keep the error color for the message
+                    return;
+                }
+
+                let subscriptions = user.Subscriptions || "";
+
+                // Ensure 'subscriptions' is treated as an array for robust manipulation
+                let subscriptionArray = subscriptions.split(',').map(s => s.trim()).filter(s => s !== "");
+
+                button.textContent = subscriptionArray.includes("IIFPP") ? "Unsubscribe" : "Subscribe";
+
+                button.onclick = () => {
+                    if (button.disabled) return;
+                    button.disabled = true;
+
+                    let updatedSubscriptionArray = [...subscriptionArray]; // Create a copy
+
+                    if (button.textContent === "Subscribe") {
+                        if (!updatedSubscriptionArray.includes("IIFPP")) {
+                            updatedSubscriptionArray.push("IIFPP");
+                        }
+                    } else {
+                        updatedSubscriptionArray = updatedSubscriptionArray.filter(s => s !== "IIFPP");
+                    }
+
+                    // Join back to string for API
+                    const updatedSubscriptionsString = updatedSubscriptionArray.join(',');
+
+                    fetch(`${apiUrl}/${user.id}`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ Subscriptions: updatedSubscriptionsString })
+                    })
+                    .then(response => response.json())
+                    .then(() => {
+                        // Update subscriptionArray to reflect the new state for immediate UI update
+                        subscriptionArray = updatedSubscriptionArray;
+                        button.textContent = subscriptionArray.includes("IIFPP") ? "Unsubscribe" : "Subscribe";
+                        messageDiv.textContent = button.textContent === "Unsubscribe" 
+                            ? "Successfully subscribed to IIFPP."
+                            : "Successfully unsubscribed from IIFPP.";
+                        messageDiv.style.color = "green";
+                    })
+                    .catch(() => {
+                        messageDiv.textContent = "Error updating subscription.";
+                        messageDiv.style.color = "red";
+                    })
+                    .finally(() => {
+                        setTimeout(() => button.disabled = false, 2000);
+                    });
+                };
+            })
+            .catch(() => {
+                // If API fetch fails even when currentUserID exists
+                messageDiv.innerHTML = 'Error fetching data from the API. Please <a href="https://www.plasmastarstudios.com/-5/personal" style="color: blue; text-decoration: underline;">login</a> or try again.';
+                messageDiv.style.color = "red";
+            });
+    }
+</script>
         </div>
     </div>
 
