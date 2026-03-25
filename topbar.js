@@ -134,9 +134,9 @@ const topbarTemplate = `
           </li>
         </ul>
       </li>
-      <li><a href="#">Account</a></li> 
+      <li><a href="https://plasmastarstudios.github.io/gawioghsaioghwaihfiohowiahgoiawrtioasygajklbnmz-nfklahwgioahiosygiouy9201571285-512895172895-857pss/Account/Stafflogin/login">Account</a></li> 
       <li><a href="#">🧺</a></li> 
-      <li><a herf="#">Version Beta 1.1.4</a></li>
+      <li><a herf="#">Version Beta 1.1.5</a></li>
     </ul>
   </nav>
 </header>
