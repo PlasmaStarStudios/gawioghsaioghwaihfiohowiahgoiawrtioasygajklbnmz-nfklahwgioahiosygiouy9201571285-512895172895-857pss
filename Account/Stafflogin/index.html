@@ -14,6 +14,18 @@
             margin: 40px auto;
             padding: 20px;
         }
+        /* Settings Link Styling */
+        .settings-link-container {
+            text-align: right;
+            margin-bottom: 10px;
+        }
+        .settings-link-container a {
+            color: #b366ff;
+            text-decoration: none;
+            font-size: 0.9em;
+            font-weight: bold;
+        }
+        .settings-link-container a:hover { text-decoration: underline; }
 
         .snippet-container {
             background-color: #262626;
@@ -78,6 +90,14 @@
     <script src="../../topbar.js"></script>
 
     <div class="content-wrapper">
+
+        <div class="settings-link-container">
+            <a href="https://example.com">Settings ⚙️</a>
+        </div>
+
+        <div style="background-color: darkgray; padding: 20px; border: 1px solid #ccc; border-radius: 5px; margin-bottom: 40px;" id="profile">
+            <p style="color: black;">Loading profile...</p>
+        </div>
 
         <section class="snippet-container" id="section-job">
             <div class="snippet-header">💼 Job Essentials</div>
