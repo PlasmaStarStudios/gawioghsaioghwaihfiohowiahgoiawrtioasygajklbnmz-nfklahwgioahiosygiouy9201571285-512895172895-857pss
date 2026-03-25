@@ -4,16 +4,8 @@ const topbarTemplate = `
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px 5%; /* Use % for consistent side-spacing on all screens */
+    padding: 10px 20px;
     background-color: #722a9e;
-    
-    /* --- The Fixes --- */
-    width: 100%;             /* Force it to fill the screen width */
-    box-sizing: border-box;  /* Ensures padding doesn't push it off-screen */
-    position: relative;      /* Keeps it at the top of the stack */
-    z-index: 1000;           /* Ensures it stays above the forms */
-    left: 0;
-    top: 0;
   }
 
   body {

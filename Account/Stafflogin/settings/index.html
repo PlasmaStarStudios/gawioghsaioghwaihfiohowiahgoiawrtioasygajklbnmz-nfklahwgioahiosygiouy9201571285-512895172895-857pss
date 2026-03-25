@@ -8,6 +8,36 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     
     <style>
+        .header-area {
+        width: 100%;
+        max-width: 500px; /* Matches your container width */
+        margin-bottom: -10px; /* Pulls containers slightly closer */
+        display: flex;
+        justify-content: flex-start;
+    }
+
+    .back-btn {
+        background-color: #333;
+        color: #b366ff;
+        border: 1px solid #444;
+        padding: 8px 16px;
+        border-radius: 5px;
+        text-decoration: none;
+        font-size: 0.9em;
+        font-weight: bold;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .back-btn:hover {
+        background-color: #722a9e;
+        color: white;
+        border-color: #b366ff;
+        padding-top: 50px;
+    }
+
         body {
             font-family: 'Segoe UI', Arial, sans-serif;
             margin: 0;
@@ -80,6 +110,13 @@
 </head>
 <body>
 
+    <div class="header-area">
+        <a href="javascript:history.back()" class="back-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+            Back
+        </a>
+    </div>
+    
     <div class="container">
         <h2>General Information</h2>
         <form id="profileForm">
