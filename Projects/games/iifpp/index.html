@@ -92,7 +92,7 @@
     if (!currentUserID) {
         button.textContent = "Subscribe (LOGIN REQUIRED)";
         // Modify messageDiv.innerHTML to include the link
-        messageDiv.innerHTML = 'Subscriptions require an account. <a href="https://www.plasmastarstudios.com/-5/personal" style="color: blue; text-decoration: underline;">Login</a>.';
+        messageDiv.innerHTML = 'Subscriptions require an account. <a href="https://plasmastarstudios.github.io/pssweb/Account/Consumer/login/" style="color: blue; text-decoration: underline;">Login</a>.';
         messageDiv.style.color = "red"; // Keep the error color for the message
     } else {
         fetch(apiUrl)
