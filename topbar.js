@@ -251,7 +251,7 @@ const topbarTemplate = `
     <ul>
       <li><a href="https://plasmastarstudios.github.io/pssweb/index.html">Home</a></li>
       <li class="has-dropdown">
-        <a href="#">Projects</a>
+        <a href="https://example.com">Projects</a>
         <ul class="dropdown">
           <li class="has-submenu">
             <a href="#">Games ❯</a>
