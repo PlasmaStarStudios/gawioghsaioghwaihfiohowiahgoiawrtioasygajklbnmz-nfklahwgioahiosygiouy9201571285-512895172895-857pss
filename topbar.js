@@ -6,7 +6,7 @@ const topbarTemplate = `
     align-items: center;
     padding: 10px 20px;
     background-color: #722a9e;
-    min-height: 100px;
+    min-height: 90px;
     position: relative;
     z-index: 1000;
   }
@@ -18,29 +18,23 @@ const topbarTemplate = `
   nav ul {
     display: flex;
     list-style: none;
-    gap: 15px;
+    gap: 12px;
     margin: 0;
     padding: 0;
-    align-items: center;
   }
 
-  /* RESTORED: Original Button Styling with Borders */
+  /* Main Buttons */
   nav ul li a {
     text-decoration: none;
     color: #ffffff;
-    background-color: transparent;
-    border: 2px solid #ffffff; /* The classic border */
-    padding: 8px 18px;
+    border: 2px solid #ffffff;
+    padding: 8px 16px;
     border-radius: 5px;
     font-weight: bold;
     font-size: 14px;
     white-space: nowrap;
-    display: inline-block;
     transition: 0.3s;
-  }
-
-  nav ul li a:hover {
-    background-color: rgba(255, 255, 255, 0.1);
+    display: inline-block;
   }
 
   nav ul li { position: relative; }
@@ -54,15 +48,14 @@ const topbarTemplate = `
     right: 0;
     background-color: #722a9e;
     padding: 10px;
-    list-index: 100;
+    list-style: none;
     display: flex;
     flex-direction: column;
     border-radius: 0 0 5px 5px;
-    border-top: 15px solid transparent; /* Buffer for easier hovering */
-    transition: 0.3s ease;
+    transition: 0.3s;
   }
 
-  /* --- SIDE MENUS (Level 2) --- */
+  /* --- SIDE MENUS (Level 2 - Software/Other) --- */
   .side-menu {
     visibility: hidden;
     opacity: 0;
@@ -71,43 +64,44 @@ const topbarTemplate = `
     right: 100%;
     background-color: #8732bb;
     padding: 10px;
+    list-style: none;
     display: flex;
     flex-direction: column;
     border-radius: 5px 0 0 5px;
-    border-right: 10px solid transparent; /* Buffer */
-    transition: 0.3s ease;
+    transition: 0.3s;
   }
 
-  /* HOVER TRIGGERS */
+  /* SHOW LOGIC */
   nav ul li:hover > .dropdown,
   .has-submenu:hover > .side-menu {
     visibility: visible;
     opacity: 1;
   }
 
-  /* Dropdown buttons shouldn't have double borders */
   .dropdown li a, .side-menu li a {
-    border: 1px solid rgba(255,255,255,0.3);
-    width: 170px;
-    text-align: center;
-    margin: 4px 0;
+    border: none;
+    width: 180px;
+    text-align: left;
+    padding: 10px;
+    margin: 2px 0;
   }
 
-  /* --- RESPONSIVE FIXES --- */
-  @media (max-width: 900px) {
-    header { padding: 10px; min-height: 80px; }
-    .logo img { height: 60px; }
+  /* --- MOBILE FIXES (No more stacking!) --- */
+  @media (max-width: 800px) {
+    header { padding: 5px 10px; min-height: 70px; }
+    .logo img { height: 50px; }
     
+    /* Allows the menu to slide left/right on tiny screens instead of breaking */
     nav {
       overflow-x: auto;
-      max-width: 75%;
-      -webkit-overflow-scrolling: touch;
+      max-width: 70%;
     }
     
-    nav ul { gap: 8px; padding-bottom: 5px; }
-    nav ul li a { padding: 6px 12px; font-size: 12px; }
+    nav ul { gap: 8px; }
+    nav ul li a { padding: 5px 10px; font-size: 12px; }
     
-    .dropdown { right: auto; left: -50px; }
+    /* On mobile, complex nested hovers are disabled to prevent glitches */
+    .dropdown, .side-menu { right: auto; left: 0; }
   }
 </style>
 
@@ -145,7 +139,7 @@ const topbarTemplate = `
       </li>
       <li><a href="https://plasmastarstudios.github.io/pssweb/Account/Consumer/login/">Account</a></li> 
       <li><a href="#">🧺</a></li> 
-      <li><a href="#" style="border: 1px solid rgba(255,255,255,0.4); color: rgba(255,255,255,0.7); font-size: 11px;">v1.1.12</a></li>
+      <li><a href="#" style="border:none; opacity:0.5; font-size:10px;">v1.1.13  BETA</a></li>
     </ul>
   </nav>
 </header>
