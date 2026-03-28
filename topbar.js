@@ -6,118 +6,118 @@ const topbarTemplate = `
     align-items: center;
     padding: 10px 20px;
     background-color: #722a9e;
+    min-height: 80px;
     position: relative;
     z-index: 1000;
   }
 
-  .logo img { height: 60px; width: auto; }
+  body { margin: 0; font-family: "Segoe UI", sans-serif; }
 
-  /* Desktop Navigation */
+  .logo img {
+    height: 80px;
+    width: auto;
+    display: block;
+  }
+
   nav ul {
     display: flex;
     list-style: none;
-    gap: 15px;
+    gap: 10px;
     margin: 0;
     padding: 0;
   }
 
+  /* Standard Button Style */
   nav ul li a {
     text-decoration: none;
-    color: white;
-    border: 2px solid white;
-    padding: 6px 15px;
-    border-radius: 5px;
+    color: #ffffff;
+    border: 1px solid #ffffff;
+    padding: 6px 12px;
+    border-radius: 4px;
     font-weight: bold;
-    transition: 0.3s;
+    font-size: 14px;
+    white-space: nowrap;
+    transition: 0.2s;
   }
 
-  /* Dropdown Styles (Desktop Only) */
-  @media (min-width: 769px) {
-    nav ul li:hover > .dropdown {
-      display: flex;
-      visibility: visible;
-      opacity: 1;
-    }
-    .dropdown {
-      position: absolute;
-      display: none;
-      flex-direction: column;
-      background: #722a9e;
+  nav ul li a:hover { background-color: rgba(255,255,255,0.2); }
+
+  /* --- DROPDOWN LOGIC (Restored for PC) --- */
+  .dropdown {
+    visibility: hidden;
+    opacity: 0;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: #722a9e;
+    flex-direction: column;
+    padding: 10px;
+    border-radius: 0 0 5px 5px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    transition: 0.3s ease;
+  }
+
+  /* This is what broke: Re-adding the hover trigger */
+  nav ul li:hover > .dropdown {
+    visibility: visible;
+    opacity: 1;
+  }
+
+  .dropdown li a {
+    border: none;
+    display: block;
+    width: 150px;
+    padding: 10px;
+    text-align: left;
+  }
+
+  /* --- MOBILE FIXES --- */
+  @media (max-width: 850px) {
+    header {
       padding: 10px;
-      border-radius: 0 0 5px 5px;
-      top: 100%;
+      justify-content: space-around; /* Spread logo and nav better */
     }
-  }
-
-  /* Mobile Hamburger Button */
-  .menu-toggle {
-    display: none;
-    background: none;
-    border: 2px solid white;
-    color: white;
-    font-size: 24px;
-    padding: 5px 10px;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-
-  /* Mobile Viewport */
-  @media (max-width: 768px) {
-    .menu-toggle { display: block; }
     
-    nav {
-      display: none; /* Hidden by default on mobile */
-      position: absolute;
-      top: 100%;
-      left: 0;
-      width: 100%;
-      background-color: #5a217d;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-    }
-
-    nav.active { display: block; }
+    .logo img { height: 50px; } /* Shrink logo to save room */
 
     nav ul {
-      flex-direction: column;
-      padding: 20px;
-      gap: 10px;
+      gap: 5px;
     }
 
     nav ul li a {
-      display: block;
-      text-align: center;
-      width: 100%;
-      box-sizing: border-box;
+      font-size: 12px;
+      padding: 5px 8px;
     }
 
-    .dropdown { display: none !important; } /* Simplify mobile by hiding complex nesting */
+    /* Hide specific non-essential items on very small screens to prevent clutter */
+    .version-tag { display: none; }
+    
+    /* On mobile, dropdowns can be tricky; 
+       We keep them hidden unless clicked, or redirect to a dedicated page */
+    .dropdown { display: none; } 
   }
 </style>
 
 <header>
   <div class="logo">
-    <img src="https://raw.githubusercontent.com/PlasmaStarStudios/pssweb/refs/heads/main/Devs.PN/logo.png" alt="PSSLOGO">
+    <img src="https://raw.githubusercontent.com/PlasmaStarStudios/pssweb/refs/heads/main/Devs.PN/logo.png" alt="PSS">
   </div>
-  
-  <button class="menu-toggle" onclick="toggleMenu()">☰</button>
-
-  <nav id="topNav">
+  <nav>
     <ul>
       <li><a href="https://plasmastarstudios.github.io/pssweb/index.html">Home</a></li>
-      <li><a href="https://plasmastarstudios.github.io/pssweb/Projects/games/iifpp/">Projects</a></li>
-      <li><a href="https://plasmastarstudios.github.io/pssweb/Account/Consumer/login/">Account</a></li>
-      <li><a href="#">🧺</a></li>
-      <li><a href="#" style="opacity: 0.7; border-color: transparent;">v1.1.12</a></li>
+      <li>
+        <a href="https://plasmastarstudios.github.io/pssweb/Projects/">Projects ▾</a>
+        <ul class="dropdown">
+          <li><a href="https://plasmastarstudios.github.io/pssweb/Projects/games/iifpp/">IIFPP</a></li>
+          <li><a href="https://plasmastarstudios.github.io/pssweb/Projects/games/rrp/">RRP</a></li>
+        </ul>
+      </li>
+      <li><a href="https://plasmastarstudios.github.io/pssweb/Account/Consumer/login/">Account</a></li> 
+      <li><a href="#">🧺</a></li> 
+      <li class="version-tag"><a href="#" style="border:none; opacity:0.6;">v1.1.12</a></li>
     </ul>
   </nav>
 </header>
-
-<script>
-  function toggleMenu() {
-    const nav = document.getElementById('topNav');
-    nav.classList.toggle('active');
-  }
-</script>
 `;
 
 document.body.insertAdjacentHTML('afterbegin', topbarTemplate);
