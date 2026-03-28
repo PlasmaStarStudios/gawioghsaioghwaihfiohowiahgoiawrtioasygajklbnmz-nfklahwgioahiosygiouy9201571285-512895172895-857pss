@@ -1,4 +1,16 @@
+(function() {
+    // Check if a favicon already exists to avoid duplicates
+    if (!document.querySelector("link[rel*='icon']")) {
+        const link = document.createElement('link');
+        link.rel = 'icon';
+        link.type = 'image/png';
+        // USE THE FULL URL TO YOUR LOGO/ICON HERE
+        link.href = 'https://github.com/PlasmaStarStudios/pssweb/blob/main/icon.png?raw=true'; 
+        document.getElementsByTagName('head')[0].appendChild(link);
+    }
+})();
 const topbarTemplate = `
+
 <style>
   header {
     display: flex;
@@ -6,114 +18,111 @@ const topbarTemplate = `
     align-items: center;
     padding: 10px 20px;
     background-color: #722a9e;
-    min-height: 90px;
-    position: relative;
-    z-index: 1000;
   }
 
-  body { margin: 0; font-family: "Segoe UI", sans-serif; }
-
-  .logo img { height: 90px; width: auto; }
+  body {
+    margin: 0;
+    font-family: "Calibri", "Candara", "Segoe UI", "Optima", "Arial", sans-serif;
+  }
 
   nav ul {
     display: flex;
     list-style: none;
-    gap: 12px;
-    margin: 0;
-    padding: 0;
+    gap: 20px;
   }
 
-  /* Main Buttons */
+  .logo img {
+    height: 110px;
+    width: auto;
+  }
+
   nav ul li a {
     text-decoration: none;
     color: #ffffff;
+    background-color: transparent; 
     border: 2px solid #ffffff;
-    padding: 8px 16px;
+    padding: 8px 18px;
     border-radius: 5px;
     font-weight: bold;
-    font-size: 14px;
-    white-space: nowrap;
-    transition: 0.3s;
     display: inline-block;
+    transition: 0.3s;
   }
 
   nav ul li { position: relative; }
 
-  /* --- DROPDOWNS (Level 1) --- */
   .dropdown {
     visibility: hidden;
     opacity: 0;
+    transition: opacity 0.4s ease, transform 0.4s ease;
+    transform: translateY(-10px);
     position: absolute;
     top: 100%;
     right: 0;
     background-color: #722a9e;
     padding: 10px;
     list-style: none;
-    display: flex;
     flex-direction: column;
+    z-index: 100;
     border-radius: 0 0 5px 5px;
-    transition: 0.3s;
+    border-top: 20px solid #722a9e;
+    margin-top: -1px;
+    width: max-content;
   }
 
-  /* --- SIDE MENUS (Level 2 - Software/Other) --- */
   .side-menu {
     visibility: hidden;
     opacity: 0;
+    transition: opacity 0.4s ease, transform 0.4s ease;
+    transform: translateX(10px);
     position: absolute;
     top: 0;
     right: 100%;
     background-color: #8732bb;
     padding: 10px;
     list-style: none;
-    display: flex;
     flex-direction: column;
+    z-index: 101;
     border-radius: 5px 0 0 5px;
-    transition: 0.3s;
+    border-right: 30px solid #722a9e;
+    margin-right: -40px;
+    width: max-content;
   }
 
-  /* SHOW LOGIC */
   nav ul li:hover > .dropdown,
   .has-submenu:hover > .side-menu {
     visibility: visible;
     opacity: 1;
+    transform: translate(0);
+    display: flex;
+  }
+
+  nav ul li a { outline: none; }
+
+  .dropdown li, .side-menu li {
+    width: 100%;
+    display: block;
   }
 
   .dropdown li a, .side-menu li a {
-    border: none;
-    width: 180px;
-    text-align: left;
-    padding: 10px;
-    margin: 2px 0;
+    display: block;
+    box-sizing: border-box;
+    margin: 4px 0;
+    text-align: center;
+    min-width: 160px;
   }
 
-  /* --- MOBILE FIXES (No more stacking!) --- */
-  @media (max-width: 800px) {
-    header { padding: 5px 10px; min-height: 70px; }
-    .logo img { height: 50px; }
-    
-    /* Allows the menu to slide left/right on tiny screens instead of breaking */
-    nav {
-      overflow-x: auto;
-      max-width: 70%;
-    }
-    
-    nav ul { gap: 8px; }
-    nav ul li a { padding: 5px 10px; font-size: 12px; }
-    
-    /* On mobile, complex nested hovers are disabled to prevent glitches */
-    .dropdown, .side-menu { right: auto; left: 0; }
-  }
+  a:focus { outline: none; }
 </style>
 
 <header>
   <div class="logo">
-    <img src="https://raw.githubusercontent.com/PlasmaStarStudios/pssweb/refs/heads/main/Devs.PN/logo.png" alt="PSS">
+  <img src="https://raw.githubusercontent.com/PlasmaStarStudios/pssweb/refs/heads/main/Devs.PN/logo.png" alt="PSSLOGOEXPANDABLE">
   </div>
   <nav>
     <ul>
       <li><a href="https://plasmastarstudios.github.io/pssweb/index.html">Home</a></li>
       <li>
-        <a href="#">Projects ▾</a>
+        <a href="#">Projects</a>
         <ul class="dropdown">
           <li class="has-submenu">
             <a href="#">Games ❯</a>
@@ -125,8 +134,8 @@ const topbarTemplate = `
           <li class="has-submenu">
             <a href="#">Software ❯</a>
             <ul class="side-menu">
-              <li><a href="https://plasmastarstudios.github.io/pssweb/Projects/software/incom">Incom</a></li>
-              <li><a href="https://plasmastarstudios.github.io/pssweb/Projects/software/psspocket/">psspocket</a></li>
+              <li><a href="https://plasmastarstudios.github.io/pssweb/Projects/software/incom">Incom (discontinued)</a></li>
+              <li><a href="https://plasmastarstudios.github.io/pssweb/Projects/software/psspocket/">psspocket(reconstruction)</a></li>
             </ul>
           </li>
           <li class="has-submenu">
@@ -139,10 +148,11 @@ const topbarTemplate = `
       </li>
       <li><a href="https://plasmastarstudios.github.io/pssweb/Account/Consumer/login/">Account</a></li> 
       <li><a href="#">🧺</a></li> 
-      <li><a href="#" style="border:none; opacity:0.5; font-size:10px;">v1.1.12</a></li>
+      <li><a herf="#">Version Beta 1.1.12</a></li>
     </ul>
   </nav>
 </header>
 `;
 
+// This line "injects" the code into the top of your body
 document.body.insertAdjacentHTML('afterbegin', topbarTemplate);
