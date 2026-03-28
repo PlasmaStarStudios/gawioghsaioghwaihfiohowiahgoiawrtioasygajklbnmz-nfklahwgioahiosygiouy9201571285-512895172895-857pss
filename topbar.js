@@ -1,16 +1,4 @@
-(function() {
-    // Check if a favicon already exists to avoid duplicates
-    if (!document.querySelector("link[rel*='icon']")) {
-        const link = document.createElement('link');
-        link.rel = 'icon';
-        link.type = 'image/png';
-        // USE THE FULL URL TO YOUR LOGO/ICON HERE
-        link.href = 'https://github.com/PlasmaStarStudios/pssweb/blob/main/icon.png?raw=true'; 
-        document.getElementsByTagName('head')[0].appendChild(link);
-    }
-})();
 const topbarTemplate = `
-
 <style>
   header {
     display: flex;
@@ -18,141 +6,118 @@ const topbarTemplate = `
     align-items: center;
     padding: 10px 20px;
     background-color: #722a9e;
+    position: relative;
+    z-index: 1000;
   }
 
-  body {
-    margin: 0;
-    font-family: "Calibri", "Candara", "Segoe UI", "Optima", "Arial", sans-serif;
-  }
+  .logo img { height: 60px; width: auto; }
 
+  /* Desktop Navigation */
   nav ul {
     display: flex;
     list-style: none;
-    gap: 20px;
-  }
-
-  .logo img {
-    height: 110px;
-    width: auto;
+    gap: 15px;
+    margin: 0;
+    padding: 0;
   }
 
   nav ul li a {
     text-decoration: none;
-    color: #ffffff;
-    background-color: transparent; 
-    border: 2px solid #ffffff;
-    padding: 8px 18px;
+    color: white;
+    border: 2px solid white;
+    padding: 6px 15px;
     border-radius: 5px;
     font-weight: bold;
-    display: inline-block;
     transition: 0.3s;
   }
 
-  nav ul li { position: relative; }
-
-  .dropdown {
-    visibility: hidden;
-    opacity: 0;
-    transition: opacity 0.4s ease, transform 0.4s ease;
-    transform: translateY(-10px);
-    position: absolute;
-    top: 100%;
-    right: 0;
-    background-color: #722a9e;
-    padding: 10px;
-    list-style: none;
-    flex-direction: column;
-    z-index: 100;
-    border-radius: 0 0 5px 5px;
-    border-top: 20px solid #722a9e;
-    margin-top: -1px;
-    width: max-content;
+  /* Dropdown Styles (Desktop Only) */
+  @media (min-width: 769px) {
+    nav ul li:hover > .dropdown {
+      display: flex;
+      visibility: visible;
+      opacity: 1;
+    }
+    .dropdown {
+      position: absolute;
+      display: none;
+      flex-direction: column;
+      background: #722a9e;
+      padding: 10px;
+      border-radius: 0 0 5px 5px;
+      top: 100%;
+    }
   }
 
-  .side-menu {
-    visibility: hidden;
-    opacity: 0;
-    transition: opacity 0.4s ease, transform 0.4s ease;
-    transform: translateX(10px);
-    position: absolute;
-    top: 0;
-    right: 100%;
-    background-color: #8732bb;
-    padding: 10px;
-    list-style: none;
-    flex-direction: column;
-    z-index: 101;
-    border-radius: 5px 0 0 5px;
-    border-right: 30px solid #722a9e;
-    margin-right: -40px;
-    width: max-content;
+  /* Mobile Hamburger Button */
+  .menu-toggle {
+    display: none;
+    background: none;
+    border: 2px solid white;
+    color: white;
+    font-size: 24px;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
   }
 
-  nav ul li:hover > .dropdown,
-  .has-submenu:hover > .side-menu {
-    visibility: visible;
-    opacity: 1;
-    transform: translate(0);
-    display: flex;
+  /* Mobile Viewport */
+  @media (max-width: 768px) {
+    .menu-toggle { display: block; }
+    
+    nav {
+      display: none; /* Hidden by default on mobile */
+      position: absolute;
+      top: 100%;
+      left: 0;
+      width: 100%;
+      background-color: #5a217d;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    }
+
+    nav.active { display: block; }
+
+    nav ul {
+      flex-direction: column;
+      padding: 20px;
+      gap: 10px;
+    }
+
+    nav ul li a {
+      display: block;
+      text-align: center;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .dropdown { display: none !important; } /* Simplify mobile by hiding complex nesting */
   }
-
-  nav ul li a { outline: none; }
-
-  .dropdown li, .side-menu li {
-    width: 100%;
-    display: block;
-  }
-
-  .dropdown li a, .side-menu li a {
-    display: block;
-    box-sizing: border-box;
-    margin: 4px 0;
-    text-align: center;
-    min-width: 160px;
-  }
-
-  a:focus { outline: none; }
 </style>
 
 <header>
   <div class="logo">
-  <img src="https://raw.githubusercontent.com/PlasmaStarStudios/pssweb/refs/heads/main/Devs.PN/logo.png" alt="PSSLOGOEXPANDABLE">
+    <img src="https://raw.githubusercontent.com/PlasmaStarStudios/pssweb/refs/heads/main/Devs.PN/logo.png" alt="PSSLOGO">
   </div>
-  <nav>
+  
+  <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+
+  <nav id="topNav">
     <ul>
       <li><a href="https://plasmastarstudios.github.io/pssweb/index.html">Home</a></li>
-      <li>
-        <a href="#">Projects</a>
-        <ul class="dropdown">
-          <li class="has-submenu">
-            <a href="#">Games ❯</a>
-            <ul class="side-menu">
-              <li><a href="https://plasmastarstudios.github.io/pssweb/Projects/games/iifpp/">IIFPP (BETA)</a></li>
-              <li><a href="https://plasmastarstudios.github.io/pssweb/Projects/games/rrp/">RRP</a></li>
-            </ul>
-          </li>
-          <li class="has-submenu">
-            <a href="#">Software ❯</a>
-            <ul class="side-menu">
-              <li><a href="https://plasmastarstudios.github.io/pssweb/Projects/software/incom">Incom (discontinued)</a></li>
-              <li><a href="https://plasmastarstudios.github.io/pssweb/Projects/software/psspocket/">psspocket(reconstruction)</a></li>
-            </ul>
-          </li>
-          <li class="has-submenu">
-            <a href="#">Other ❯</a>
-            <ul class="side-menu">
-              <li><a href="https://plasmastarstudios.github.io/pssweb/Projects/Bots/adp/">ADP</a></li>
-            </ul>
-          </li>
-        </ul>
-      </li>
-      <li><a href="https://plasmastarstudios.github.io/pssweb/Account/Consumer/login/">Account</a></li> 
-      <li><a href="#">🧺</a></li> 
-      <li><a herf="#">Version Beta 1.1.13</a></li>
+      <li><a href="https://plasmastarstudios.github.io/pssweb/Projects/games/iifpp/">Projects</a></li>
+      <li><a href="https://plasmastarstudios.github.io/pssweb/Account/Consumer/login/">Account</a></li>
+      <li><a href="#">🧺</a></li>
+      <li><a href="#" style="opacity: 0.7; border-color: transparent;">v1.1.12</a></li>
     </ul>
   </nav>
 </header>
+
+<script>
+  function toggleMenu() {
+    const nav = document.getElementById('topNav');
+    nav.classList.toggle('active');
+  }
+</script>
 `;
 
-// This line "injects" the code into the top of your body
 document.body.insertAdjacentHTML('afterbegin', topbarTemplate);
