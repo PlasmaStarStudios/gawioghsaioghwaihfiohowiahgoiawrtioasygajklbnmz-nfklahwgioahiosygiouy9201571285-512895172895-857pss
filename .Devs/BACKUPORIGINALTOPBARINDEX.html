@@ -1,0 +1,166 @@
+<header>
+  <div class="logo">
+    <img src="logo.png" alt="PSSLOGOEXPANDABLE">
+  </div>
+
+  <nav>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+                <li>
+            <a href="#">Projects</a>
+            <ul class="dropdown">
+                <li class="has-submenu">
+                <a href="#">Games ❯</a>
+                <ul class="side-menu">
+                    <li><a href="#">IIFPP (BETA)</a></li>
+                    <li><a href="#">RRP (ALPHA)</a></li>
+                </ul>
+                </li>
+
+                <li class="has-submenu">
+                <a href="#">Software ❯</a>
+                <ul class="side-menu">
+                    <li><a href="#">Incom (discontinued)</a></li>
+                    <li><a href="#">psspocket(reconstruction)</a></li>
+                </ul>
+                </li>
+
+                
+                <li class="has-submenu">
+                <a href="#">Other ❯</a>
+                <ul class="side-menu">
+                    <li><a href="#">ADP</a></li>
+                    <li><a href="#">bot 2</a></li>
+                </ul>
+                </li>
+            </ul>
+            </li>
+      <li><a href="#">Account</a></li> 
+      <li><a href="#">🧺</a></li> 
+    </ul>
+  </nav>
+</header>
+
+<style>
+  header {
+    display: flex;             /* This turns on the "horizontal" magic */
+    justify-content: space-between; /* Pushes Logo to left, Nav to right */
+    align-items: center;       /* Centers them vertically so they look neat */
+    padding: 10px 20px;        /* Gives it some breathing room */
+    background-color: #722a9e; /* Just so you can see the bar area */
+  }
+
+  body {
+    margin: 0; /* This removes the 8px gap around the whole page */
+    font-family: "Calibri", "Candara", "Segoe UI", "Optima", "Arial", sans-serif;
+  }
+
+  nav ul {
+    display: flex;             /* Makes the list items go side-by-side */
+    list-style: none;          /* Removes the bullet points */
+    gap: 20px;                 /* Puts space between the links */
+  }
+
+  .logo img {
+    height: 110px;    /* This forces the headerlogo to be exactly 50 pixels tall */
+    width: auto;     /* This tells the width to shrink proportionally so it doesn't look squished */
+  }
+
+  nav ul li a {/* CHANGE THE COLORS AND BORDER HERE FOR DEBUGGING ==================================================================================================== */
+  text-decoration: none;
+  color: #ffffff;             /* Text matches the border */
+  background-color: transparent; 
+  border: 2px solid #ffffff;  /* This creates the outline */
+  padding: 8px 18px;          /* Adjusted slightly to account for border thickness */
+  border-radius: 5px;
+  font-weight: bold;
+  display: inline-block;      /* Ensures the padding/border looks right */
+  transition: 0.3s;
+}
+
+/* 1. The Parent: This tells the 'Projects' button it's the boss of the dropdown */
+nav ul li {
+  position: relative; 
+}
+
+/* 2. The Dropdown (Games, Software, Bots): 
+   We hide it and force it to stack vertically */
+/* The first dropdown (Games, Software, Bots) */
+/* 1. The first dropdown (Games, Software, Bots) */
+/* 1. First Dropdown (Games, Software, Bots) */
+.dropdown {
+  /* Remove display: none; and add these: */
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  transform: translateY(-10px); /* Makes it slide down slightly */
+
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: #722a9e;
+  padding: 10px;
+  list-style: none;
+  flex-direction: column;
+  z-index: 100;
+  border-radius: 0 0 5px 5px;
+  border-top: 20px solid #722a9e;
+  margin-top: -1px;
+}
+
+/* 2. Side Menu (Game 1, Game 2) */
+.side-menu {
+  /* Remove display: none; and add these: */
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  transform: translateX(10px); /* Makes it slide in from the right */
+
+  position: absolute;
+  top: 0;
+  right: 100%;
+  background-color: #8732bb;
+  padding: 10px;
+  list-style: none;
+  flex-direction: column;
+  z-index: 101;
+  border-radius: 5px 0 0 5px;
+  border-right: 30px solid #722a9e;
+  margin-right: -40px;
+}
+
+/* 3. The Hover Triggers */
+/* Update this block */
+nav ul li:hover > .dropdown,
+.has-submenu:hover > .side-menu {
+  visibility: visible;
+  opacity: 1;
+  transform: translate(0); /* Resets both the Y and X slides */
+}
+
+nav ul li a {
+  outline: none;
+  -webkit-tap-highlight-color: transparent; /* Fixes ghost boxes on some browsers */
+}
+
+/* Ensure the sub-buttons don't inherit the bridge's transparency */
+.dropdown li, .side-menu li {
+  width: 100%;
+  display: block;
+}
+
+/* This targets buttons in both the main dropdown AND the side fly-out */
+.dropdown li a, .side-menu li a {
+  display: block;        /* Changed from inline-block to block */
+  box-sizing: border-box; /* Includes border/padding in the width calculation */
+  margin: 4px 0;         /* Space between buttons */
+  text-align: center;    /* Keeps text centered inside the button */
+  min-width: 160px;
+}
+
+.has-submenu:hover > .side-menu {
+  display: flex;            /* Show 'Game 1/Game 2' */
+}
+
+a:focus { outline: none; }
+</style>
