@@ -216,6 +216,27 @@ const topbarTemplate = `
       font-size: 0.8em;
       margin-left: 6px;
     }
+
+    body {
+      overflow-x: hidden;
+    }
+
+    nav.open > ul {
+      max-height: 100vh;
+    }
+
+    nav ul li a {
+      width: 90%;
+      margin: 0.2rem auto;
+      font-size: 1.2rem;
+      letter-spacing: 0.02em;
+    }
+
+    .dropdown li a, .side-menu li a {
+      min-width: auto;
+      padding: 8px 12px;
+      text-align: left;
+    }
   }
 
   a:focus { outline: none; }
@@ -229,7 +250,7 @@ const topbarTemplate = `
   <nav>
     <ul>
       <li><a href="https://plasmastarstudios.github.io/pssweb/index.html">Home</a></li>
-      <li>
+      <li class="has-dropdown">
         <a href="#">Projects</a>
         <ul class="dropdown">
           <li class="has-submenu">
@@ -275,14 +296,21 @@ if (menuToggle && topbarNav) {
   });
 }
 
-const submenuTriggers = document.querySelectorAll('li.has-submenu > a');
+const submenuTriggers = document.querySelectorAll('li.has-submenu > a, li.has-dropdown > a');
 submenuTriggers.forEach(trigger => {
   trigger.addEventListener('click', (event) => {
     const isMobile = window.matchMedia('(max-width: 860px)').matches;
     if (!isMobile) return;
 
     event.preventDefault();
+    event.stopPropagation();
     const parentLi = trigger.parentElement;
     parentLi.classList.toggle('open');
+
+    // Ensure the parent menu is open when submenu is expanded
+    if (topbarNav && !topbarNav.classList.contains('open')) {
+      topbarNav.classList.add('open');
+      menuToggle.setAttribute('aria-expanded', 'true');
+    }
   });
 });
