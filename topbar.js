@@ -148,7 +148,7 @@ const topbarTemplate = `
       </li>
       <li><a href="https://plasmastarstudios.github.io/pssweb/Account/Consumer/login/">Account</a></li> 
       <li><a href="#">🧺</a></li> 
-      <li><a herf="#">Version Beta 1.1.12</a></li>
+      <li><a herf="#">Version Beta 1.1.13</a></li>
     </ul>
   </nav>
 </header>
